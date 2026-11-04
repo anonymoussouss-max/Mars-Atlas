@@ -1,0 +1,58 @@
+[
+    {
+        "name":  "Belva crater",
+        "u":  40.28,
+        "v":  46.43,
+        "col":  1077.1,
+        "row":  2384.7
+    },
+    {
+        "name":  "South mound",
+        "u":  46.25,
+        "v":  83.26,
+        "col":  1159.2,
+        "row":  2952.8
+    },
+    {
+        "name":  "South ring",
+        "u":  56.25,
+        "v":  82.23,
+        "col":  1318.8,
+        "row":  2918.9
+    },
+    {
+        "name":  "West plateau crater",
+        "u":  8.33,
+        "v":  50.97,
+        "col":  576.7,
+        "row":  2455.3
+    },
+    {
+        "name":  "Neretva inlet apex",
+        "u":  25.69,
+        "v":  44.08,
+        "col":  876.4,
+        "row":  2345.5
+    },
+    {
+        "name":  "Floor crater east",
+        "u":  98.33,
+        "v":  34.1,
+        "col":  1955.0,
+        "row":  2190.6
+    },
+    {
+        "name":  "Delta front ridge",
+        "u":  50.69,
+        "v":  47.01,
+        "col":  1224.6,
+        "row":  2382.6
+    },
+    {
+        "name":  "Floor ring",
+        "u":  66.39,
+        "v":  72.4,
+        "col":  1476.9,
+        "row":  2779.5
+    }
+]
