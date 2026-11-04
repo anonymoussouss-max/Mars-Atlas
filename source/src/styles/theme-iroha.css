@@ -1,0 +1,37 @@
+/* Iroha theme: a moonlit night sky over the planner, after the study site's Kaguya palette. */
+:root {
+  --night-1: #0b0a24;
+  --night-2: #1c1646;
+  --night-3: #3a2460;
+  --moon: #f5d27a;
+  --cyan: #7fe3ff;
+  --pink: #ff6fae;
+  --orange: #e0569b; /* the old accent variable now carries Iroha pink */
+}
+
+::selection { background: #d8c9ff; color: #1d1238; }
+
+.topbar {
+  background:
+    radial-gradient(1.2px 1.2px at 12% 30%, #fff8 50%, transparent 51%),
+    radial-gradient(1px 1px at 28% 70%, #fff7 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 46% 22%, #fff9 50%, transparent 51%),
+    radial-gradient(1px 1px at 63% 64%, #fff6 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 78% 35%, #fff8 50%, transparent 51%),
+    radial-gradient(1px 1px at 91% 72%, #fff6 50%, transparent 51%),
+    linear-gradient(100deg, var(--night-1) 0%, var(--night-2) 55%, var(--night-3) 100%);
+  border-bottom: 1px solid #3b3470;
+}
+
+/* The planet logo becomes a crescent moon with a faint halo. */
+.planet-logo, .planet-logo:after { background: var(--moon); }
+.planet-logo { box-shadow: 0 0 14px #f5d27a66; }
+.planet-logo:after { background: var(--night-2); top: -3px; right: -9px; bottom: 9px; left: 9px; }
+.planet-logo:before { border-color: #7fe3ff99; }
+.planet-logo span { display: none; }
+
+h1, h2, h3, .dialog h2, .explore-header h2 { font-family: "Zen Maru Gothic", "Space Grotesk", sans-serif; letter-spacing: .01em; }
+
+/* Primary buttons glow softly, like the study site's moonlit cards. */
+.primary { box-shadow: 0 4px 14px #e0569b33; }
+.primary:hover { box-shadow: 0 6px 18px #e0569b4d; }
