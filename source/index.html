@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mars Atlas · Plan a Marswalk</title>
+  <meta name="description" content="Mars Atlas layers NASA Mars data into one map for planning a safe, science-rich Marswalk: routes that avoid hazards, oxygen and radiation budgets, daylight windows and a helmet HUD walk-through.">
+  <meta name="theme-color" content="#0b0a24">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+  <meta property="og:title" content="Mars Atlas · Plan a Marswalk">
+  <meta property="og:description" content="A layered, integrated map for the first humans to walk on Mars.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='20' fill='%23f5d27a'/%3E%3Cellipse cx='32' cy='34' rx='30' ry='9' fill='none' stroke='%237fe3ff' stroke-width='3' transform='rotate(-28 32 34)'/%3E%3C/svg%3E">
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#planner">Skip to mission planner</a>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="Mars Atlas home"><span class="planet-logo"><span></span></span><span>MARS<span class="brand-light">ATLAS</span><small>GO BEYOND THE KNOWN.</small></span></a>
+  <nav class="main-nav" aria-label="Main navigation">
+    <button data-tab="explore"><i data-lucide="compass"></i>Explore</button>
+    <button class="active" data-tab="planner"><i data-lucide="route"></i>Route planner</button>
+    <button data-tab="saved"><i data-lucide="bookmark"></i>Saved missions<span id="saved-count"></span></button>
+  </nav>
+  <div class="header-right">
+    <span class="system-status" id="system-status"><b></b> <span>ALL SYSTEMS NOMINAL</span></span>
+    <button class="avatar" id="profile" aria-label="About Mars Atlas">EX</button>
+  </div>
+</header>
+
+<main class="workspace">
+<aside class="planner" id="planner" aria-label="Mission planner">
+ <div class="planner-scroll">
+  <div class="eyebrow"><span class="tiny-square"></span> A LITTLE CURIOSITY. A NEW WORLD.</div>
+  <h1>Your next frontier<span>.</span></h1>
+  <p class="intro">Every great journey starts with a plan.<br>Let’s make yours a Martian one.</p>
+
+  <div class="section-label"><span>PLAN YOUR JOURNEY</span><span class="step-label">01 — 03</span></div>
+  <div class="route-inputs">
+   <div class="route-rail"><span class="origin-dot"></span><span class="rail-line"></span><i data-lucide="map-pin"></i></div>
+   <div class="location-fields">
+    <label for="from">STARTING POINT</label>
+    <div class="input-wrap"><input id="from" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggestions-from"><button data-pick="from" title="Place starting point on map" aria-label="Place starting point on map"><i data-lucide="locate-fixed"></i></button></div>
+    <div class="suggestions" id="suggestions-from" hidden></div>
+    <div class="field-divider"></div>
+    <label for="to">DESTINATION</label>
+    <div class="input-wrap"><input id="to" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggestions-to"><button data-pick="to" title="Place destination on map" aria-label="Place destination on map"><i data-lucide="map-pin"></i></button></div>
+    <div class="suggestions" id="suggestions-to" hidden></div>
+   </div>
+   <button class="swap" id="swap" aria-label="Swap starting point and destination"><i data-lucide="arrow-down-up"></i></button>
+  </div>
+
+  <div class="stops" id="stops" aria-label="Science stops"></div>
+  <div class="stop-adder">
+   <button class="add-stop" id="add-stop"><i data-lucide="circle-plus"></i>Add a science stop</button>
+   <div class="suggestions" id="suggestions-stop" hidden></div>
+  </div>
+
+  <div class="travel-modes" role="group" aria-label="Travel mode">
+   <button data-mode="walk" class="selected"><i data-lucide="footprints"></i>On foot<span>≤ 2.7 km/h</span></button>
+   <button data-mode="rover"><i data-lucide="truck"></i>Surface rover<span>≤ 15 km/h</span></button>
+  </div>
+
+  <div class="section-label parameters-label"><span>MISSION PARAMETERS</span><i data-lucide="sliders-horizontal"></i></div>
+  <div class="parameter-row"><div class="parameter-title"><i data-lucide="users"></i><span>Crew members</span></div><div class="stepper"><button id="crew-minus" aria-label="Remove crew member">−</button><output id="crew-value">01</output><button id="crew-plus" aria-label="Add crew member">+</button></div></div>
+  <div class="parameter-row"><label class="parameter-title" for="activity"><i data-lucide="activity"></i><span>Activity level</span></label><select id="activity"><option value="0.35">Light</option><option value="0.43" selected>Moderate</option><option value="0.5">Hard</option></select></div>
+  <div class="reserve-row"><label class="parameter-title" for="reserve"><i data-lucide="shield-plus"></i>Oxygen reserve</label><output id="reserve-value">30<span>%</span></output></div>
+  <input id="reserve" class="range" type="range" min="10" max="100" step="5" value="30">
+  <div class="range-labels"><span>10%</span><span>A little extra, just in case.</span><span>100%</span></div>
+  <div class="parameter-row return-row"><label class="parameter-title" for="round-trip"><i data-lucide="repeat-2"></i>Include return trip</label><label class="toggle"><input type="checkbox" id="round-trip"><span></span></label></div>
+
+  <div class="section-label conditions-label"><span>CONDITIONS ON THE DAY</span><span class="sim-tag">SIMULATED</span></div>
+  <div class="parameter-row"><label class="parameter-title" for="mission-date"><i data-lucide="clock"></i><span>Mission date</span></label><input id="mission-date" class="date-input" type="date" min="2026-01-01" max="2100-12-31" value="2040-03-15"></div>
+  <p class="season-line" id="season-line"></p>
+  <div class="reserve-row"><label class="parameter-title" for="start-time"><i data-lucide="sunrise"></i>EVA start (local solar time)</label><output id="start-value">08:00</output></div>
+  <input id="start-time" class="range" type="range" min="4" max="20" step="0.25" value="8">
+  <div class="sol-bar" id="sol-bar" aria-hidden="true"></div>
+  <div class="parameter-row"><label class="parameter-title" for="dust"><i data-lucide="wind"></i><span>Dust opacity</span></label><select id="dust"><option value="clear" selected>Clear (τ ≈ 0.5)</option><option value="hazy">Hazy (τ ≈ 1.5)</option><option value="storm">Dust storm (τ ≈ 4)</option></select></div>
+  <div class="parameter-row"><label class="parameter-title" for="space-weather"><i data-lucide="radiation"></i><span>Space weather</span></label><select id="space-weather"><option value="quiet" selected>Quiet</option><option value="elevated">Elevated</option><option value="spe">Solar particle event</option></select></div>
+
+  <button class="calculate" id="calculate">Calculate route <i data-lucide="arrow-up-right"></i></button>
+
+  <div class="oxygen-card">
+   <div class="oxygen-heading"><span class="oxygen-symbol">O₂</span><span>YOUR OXYGEN ESTIMATE</span><button id="oxygen-info" aria-label="How oxygen is calculated"><i data-lucide="info"></i></button></div>
+   <div class="oxygen-total"><strong id="oxygen-total">0</strong><span>liters of O₂</span><span class="estimate-badge">WITH RESERVE</span></div>
+   <div class="oxygen-divider"></div>
+   <div class="oxygen-details"><span>Base consumption <b id="base-oxygen"></b></span><span>Reserve <b id="reserve-oxygen"></b></span><span>Walk-back radius <b id="walkback-value"></b></span><span id="rec-row">Reserve to cover 95% of walks <b id="rec-reserve"></b></span></div>
+   <div class="oxygen-note"><i data-lucide="shield-check"></i><span id="oxygen-note">Prepared for the journey ahead.</span></div>
+  </div>
+
+  <section class="safety-card" id="safety-card" aria-labelledby="safety-title">
+   <div class="safety-head"><span id="safety-title">GO / NO-GO CHECK</span><span class="status-pill" id="status-pill">GO</span><button id="safety-info" aria-label="How the safety checks work"><i data-lucide="info"></i></button></div>
+   <div class="safety-metrics">
+    <div><span><i data-lucide="activity"></i>Crew effort</span><b id="effort-value">–</b><small id="effort-context"></small></div>
+    <div><span><i data-lucide="footprints"></i>Average pace</span><b id="pace-value">–</b><small id="pace-context"></small></div>
+    <div><span><i data-lucide="radiation"></i>Radiation estimate</span><b id="dose-value">–</b><small id="dose-context"></small></div>
+    <div><span><i data-lucide="radiation"></i>Potential radiation</span><b id="potential-value">–</b><small>if a storm like May 2024 hits</small></div>
+    <div><span><i data-lucide="thermometer"></i>Suit environment</span><b id="temp-value">–</b><small id="temp-context"></small></div>
+    <div><span><i data-lucide="sunset"></i>Daylight margin</span><b id="daylight-value">–</b><small id="daylight-context"></small></div>
+    <div><span><i data-lucide="timer"></i>EVA duration</span><b id="eva-value">–</b><small id="eva-context"></small></div>
+   </div>
+   <p class="estimate-warning"><i data-lucide="triangle-alert"></i>Weather and radiation are estimates based on season and past NASA measurements. They may not be correct, and they aren't forecasts.</p>
+   <ul class="checks" id="checks"></ul>
+  </section>
+
+  <div class="mission-actions">
+   <button class="secondary" id="launch-hud"><i data-lucide="scan-eye"></i>HUD walk-through</button>
+   <button class="secondary" id="open-briefing"><i data-lucide="file-text"></i>Mission briefing</button>
+   <button class="secondary" id="share-link"><i data-lucide="share-2"></i>Share link</button>
+  </div>
+  <p class="simulation-note">An explorer’s simulation. Not for real mission planning.</p>
+ </div>
+ <div class="planner-bottom"><span class="connection-dot"></span> EARTH IS A MINDSET. <span>MARS IS NEXT. <i data-lucide="arrow-up-right"></i></span></div>
+</aside>
+
+<section class="map" id="map" aria-label="Interactive Mars terrain map" data-view="global" data-layer="satellite" tabindex="0">
+ <div class="map-world" id="map-world">
+  <div class="terrain"></div><div class="global-elevation"></div><div class="terrain-tint"></div>
+  <canvas class="trav-layer" id="trav-layer" aria-hidden="true"></canvas>
+  <div class="map-grid"></div>
+  <svg class="contours" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="contour" width="240" height="230" patternUnits="userSpaceOnUse"><path d="M-30 180C15 45 130 260 220 80S350 140 200 250M-40 160C20 20 145 240 205 60S330 130 180 240M-50 140C40 10 160 220 190 40S310 120 160 230M-60 120C60 0 175 200 175 20S290 110 140 220" fill="none" stroke="currentColor" stroke-width="1"/></pattern></defs><rect width="1000" height="1000" fill="url(#contour)"/></svg>
+  <div class="global-graticule" aria-hidden="true"><span style="left:16.667%">120° W</span><span style="left:33.333%">60° W</span><span style="left:50%">0°</span><span style="left:66.667%">60° E</span><span style="left:83.333%">120° E</span></div>
+  <div class="global-label global-label-one">THARSIS</div><div class="global-label global-label-two">ARABIA TERRA</div><div class="global-label global-label-three">TERRA SIRENUM</div>
+  <div class="map-region region-one">JEZERO CRATER</div><div class="map-region region-two">CRATER FLOOR</div><div class="map-region region-three">WESTERN DELTA</div><div class="map-region region-four">SÉÍTAH</div>
+  <canvas class="hazard-overlay" id="hazard-overlay" aria-hidden="true"></canvas>
+  <svg class="walkback-overlay" id="walkback-overlay" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><ellipse id="walkback-ring"/></svg>
+  <svg class="route-overlay" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><path id="route-straight"/><path id="route-shadow"/><path id="route-line"/><path id="route-dash"/><path id="route-walked"/></svg>
+  <div class="crater-layer" id="crater-layer"></div>
+  <div id="hazard-labels"></div>
+  <div id="map-markers"></div>
+  <div class="route-time" id="route-time"></div>
+  <div class="walker" id="walker" hidden><span></span></div>
+ </div>
+
+ <div class="map-top">
+  <div class="search-container">
+   <form class="map-search" id="search-form" role="search"><i data-lucide="search"></i><input aria-label="Search Mars" id="map-search" placeholder="Search a place on Mars" autocomplete="off"><kbd>⌘ K</kbd></form>
+   <div id="search-results" class="search-results" hidden></div>
+  </div>
+  <button id="map-guide" class="map-guide"><i data-lucide="orbit"></i><span id="region-name">Global Mars</span><i data-lucide="chevron-down"></i></button>
+ </div>
+ <div class="map-filters">
+  <button class="active" data-filter="landmarks"><i data-lucide="mountain"></i>Landmarks</button>
+  <button data-filter="hazards"><i data-lucide="triangle-alert"></i>Terrain hazards</button>
+  <button id="focus-route"><i data-lucide="locate-fixed"></i>Zoom to route</button>
+ </div>
+ <div class="map-location-tag"><span class="live-dot"></span><span id="map-area">MARS · GLOBAL SURFACE ATLAS</span><span id="map-projection">EQUIRECTANGULAR</span></div>
+ <div class="view-switch" role="group" aria-label="Map coverage"><button data-view="global" class="selected"><i data-lucide="orbit"></i>Global Mars</button><button data-view="jezero"><i data-lucide="mountain"></i>Jezero detail</button></div>
+ <div class="elevation-legend"><span>MOLA ELEVATION</span><div></div><small>Low <b>Relative elevation</b> High</small></div>
+ <div class="trav-legend"><span>SLOPE</span><div></div><small>Flat <b>Slope, CTX elevation</b> Steep</small></div>
+ <div class="map-tools">
+  <button id="compass" aria-label="Reset map orientation and zoom" title="Reset view"><span class="north">N</span><i data-lucide="navigation-2"></i></button>
+  <div class="zoom-controls"><button id="zoom-in" aria-label="Zoom in"><i data-lucide="plus"></i></button><button id="zoom-out" aria-label="Zoom out"><i data-lucide="minus"></i></button></div>
+  <button id="locate" aria-label="Center on starting point" title="Center on starting point"><i data-lucide="locate-fixed"></i></button>
+  <button id="fullscreen" aria-label="Toggle expanded map" title="Expand map"><i data-lucide="maximize"></i></button>
+  <button id="hud-tool" aria-label="Open helmet HUD walk-through" title="Helmet HUD"><i data-lucide="scan-eye"></i></button>
+ </div>
+ <div class="map-bottom-left">
+  <div class="layers">
+   <button class="layer-thumb" id="layers-button" aria-expanded="false" aria-controls="layer-menu"><i data-lucide="layers"></i><span>Layers</span></button>
+   <div class="layer-menu" id="layer-menu" hidden>
+    <div class="layer-group">BASE MAP</div>
+    <button data-layer="satellite" class="selected"><span>Viking color</span><i data-lucide="check"></i></button>
+    <button data-layer="terrain"><span>MOLA elevation</span><i data-lucide="mountain"></i></button>
+    <button data-layer="night"><span>Night vision</span><i data-lucide="moon"></i></button>
+    <div class="layer-group">OVERLAYS</div>
+    <label class="overlay-toggle" data-only="jezero"><input type="checkbox" data-overlay="trav"><span>Slope heatmap</span></label>
+    <label class="overlay-toggle" data-only="jezero"><input type="checkbox" data-overlay="walkback" checked><span>Walk-back radius</span></label>
+    <label class="overlay-toggle" data-only="jezero"><input type="checkbox" data-overlay="craters" checked><span>Craters</span></label>
+    <label class="overlay-toggle" data-only="jezero"><input type="checkbox" data-overlay="allRest"><span>All rest spots</span></label>
+    <label class="overlay-toggle" data-only="global"><input type="checkbox" data-overlay="missions"><span>Landing sites</span></label>
+   </div>
+  </div>
+  <div class="map-scale"><span id="scale-text">5 km</span><div></div></div>
+ </div>
+
+ <article class="journey-card" aria-live="polite">
+  <div class="journey-title"><div><span class="tiny-square"></span><span id="journey-kind">YOUR SURFACE JOURNEY</span></div><button id="save-mission" aria-label="Save mission" title="Save mission"><i data-lucide="bookmark"></i></button></div>
+  <div class="journey-stats">
+   <div><span>Total distance</span><strong id="distance"></strong></div>
+   <div><span>Travel time <button id="edit-time" aria-label="Customize travel time"><i data-lucide="pencil"></i></button></span><strong id="travel-time"></strong></div>
+   <div><span>Terrain</span><strong class="terrain-value" id="terrain-value"></strong></div>
+  </div>
+  <div class="profile" id="profile-chart" aria-label="Route profile"></div>
+  <div class="journey-footer"><span><span class="route-dot"></span><span id="route-kind">Slope-aware surface route</span></span><button id="route-details">Route details <i data-lucide="arrow-right"></i></button></div>
+ </article>
+
+ <div class="map-attribution"><span id="coordinate-readout">0.000° N, 0.000° E</span><span id="imagery-credit">Viking MDIM 2.1 · NASA/JPL/USGS</span><span><button id="credits">Data sources</button></span></div>
+ <div class="pick-banner" id="pick-banner" hidden><i data-lucide="map-pin"></i><span>Click the map to place your destination</span><button id="cancel-pick" aria-label="Cancel point selection"><i data-lucide="x"></i></button></div>
+ <div class="weather-card"><div class="weather-icon"><i data-lucide="sun" id="weather-icon"></i></div><div><strong id="weather-temp">−63°<span>C</span></strong><small>JEZERO CRATER</small></div><div class="weather-divider"></div><div class="weather-extra"><span><i data-lucide="wind"></i><span id="weather-wind">14 km/h</span></span><span id="weather-sky">Clear skies</span></div><span class="weather-demo">SIMULATED</span></div>
+ <div class="explore-panel" id="explore-panel" hidden></div>
+
+ <div class="hud" id="hud" hidden aria-label="Helmet heads-up display walk-through">
+  <div class="hud-visor"></div>
+  <div class="hud-compass" aria-hidden="true"><div class="hud-tape" id="hud-tape"></div><b class="hud-heading" id="hud-heading">000°</b></div>
+  <div class="hud-panel hud-left">
+   <div class="hud-gauge"><span>O₂ REMAINING</span><b id="hud-o2">100%</b><i><em id="hud-o2-bar"></em></i></div>
+   <div class="hud-row"><span>DOSE</span><b id="hud-dose">0.000 mSv</b></div>
+   <div class="hud-row"><span>OUTSIDE</span><b id="hud-temp">−60 °C</b></div>
+   <div class="hud-row"><span>SUNSET IN</span><b id="hud-sunset">–</b></div>
+  </div>
+  <div class="hud-panel hud-right">
+   <span>NEXT WAYPOINT</span><b id="hud-next">–</b>
+   <div class="hud-row"><span>DIST</span><b id="hud-dist">–</b></div>
+   <div class="hud-row"><span>ETA</span><b id="hud-eta">–</b></div>
+   <div class="hud-row"><span>ELAPSED</span><b id="hud-elapsed">0h 00m</b></div>
+  </div>
+  <div class="hud-alert" id="hud-alert" hidden><i data-lucide="triangle-alert"></i><span></span></div>
+  <div class="hud-controls">
+   <button id="hud-play" aria-label="Play or pause the walk"><i data-lucide="play"></i></button>
+   <input id="hud-scrub" type="range" min="0" max="1000" value="0" aria-label="Walk progress">
+   <select id="hud-speed" aria-label="Simulation speed"><option value="120">×120</option><option value="360" selected>×360</option><option value="1200">×1200</option></select>
+   <button id="hud-exit" class="hud-exit">Exit HUD <i data-lucide="x"></i></button>
+  </div>
+ </div>
+</section>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+<dialog id="dialog"><div class="dialog-header"><span class="dialog-eyebrow" id="dialog-eyebrow">MARS ATLAS / MISSION CONTROL</span><button id="close-dialog" aria-label="Close dialog"><i data-lucide="x"></i></button></div><div id="dialog-content"></div></dialog>
+<div class="print-root" id="print-root"></div>
+</body>
+</html>
